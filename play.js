@@ -7,6 +7,21 @@ const connect = function () {
     port: 50541, // PORT number here,
   });
 
+  const handleUserInput = function () {
+    // your code here
+    if (key === '\u0003') {
+      process.exit();
+    }
+  };
+  const setupInput = function () {
+    const stdin = process.stdin;
+    stdin.setRawMode(true);
+    stdin.setEncoding('utf8');
+    stdin.resume();
+    stdin.on('data', handleUserInput);
+    return stdin;
+  };
+
   // interpret incoming data as text
   conn.setEncoding('utf8');
   conn.on('connect', () => {
@@ -64,6 +79,7 @@ const connect = function () {
       }, i * 100); // <= 1s delay to make it noticeable. Can dial it down later.
     }
   });
+  setupInput();
   return conn;
 };
 
@@ -72,7 +88,6 @@ connect();
 module.exports = {
   connect,
 };
-
 // コールバック関数とは
 // function a(b) {
 //     b();
